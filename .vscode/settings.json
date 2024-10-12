@@ -1,0 +1,9 @@
+{
+    "Prettier-SQL.ignoreTabSettings":true,
+    "Prettier-SQL.tabulateAlias":true,
+    "Prettier-SQL.tabSizeOverride": 20,
+    "Prettier-SQL.insertSpacesOverride": true,
+    "Prettier-SQL.indentStyle": "tabularLeft",
+    "Prettier-SQL.SQLFlavourOverride": "sqlite",
+  }
+  
