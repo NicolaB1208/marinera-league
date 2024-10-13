@@ -1,4 +1,3 @@
-# These line is like getting the tools we need from a toolbox. We're grabbing what we need from OpenAI to talk to its AI models.
 from openai import OpenAI
 import os
 from dotenv import load_dotenv
@@ -26,80 +25,65 @@ assistant = client.beta.assistants.retrieve('asst_0urRZRs0q9ZotCxpirCrfwpQ')
 thread = client.beta.threads.create()
 #print(f"New chat session (thread) created with ID: {thread.id}")
 
-# Path to your CSV file
-csv_file_path = 'source-files/2024/cl-madrid/eliminatoria/alma_de_marinera.csv'
+# Categories list
+folder_path = "source-files/2024/cl-madrid/eliminatoria"
+file_list = os.listdir(folder_path)
+categories = [os.path.splitext(file)[0] for file in file_list]
 
-# Get the entire CSV content as a string
-csv_content = read_csv_as_string(csv_file_path)
+for category in categories:
+    # Path to your CSV file
+    csv_file_path = 'source-files/2024/cl-madrid/eliminatoria/' + category + '.csv'
 
-csv_content = f"```\n{csv_content}\n```"
+    # Get the entire CSV content as a string
+    csv_content = read_csv_as_string(csv_file_path)
 
-print(csv_content)
+    csv_content = f"```\n{csv_content}\n```"
 
-# Step 3: Add your message to the chat session
-message = client.beta.threads.messages.create(
-    thread_id=thread.id,
-    role="user",
-    content=csv_content
-)
-last_user_message_created_at = message.created_at
+    print(category + '.csv loaded as string')
 
-# Step 4: Call the model to get a response
-run = client.beta.threads.runs.create_and_poll(
-    thread_id=thread.id,
-    assistant_id=assistant.id,
-)
-
-if run.status == 'completed':
-    # Fetch all messages and filter for the last message from the assistant
-    last_message = client.beta.threads.messages.list(
+    # Step 3: Add your message to the chat session
+    message = client.beta.threads.messages.create(
         thread_id=thread.id,
-        order='desc',
-        limit=1
+        role="user",
+        content=csv_content
+    )
+    last_user_message_created_at = message.created_at
+
+    # Step 4: Call the model to get a response
+    run = client.beta.threads.runs.create_and_poll(
+        thread_id=thread.id,
+        assistant_id=assistant.id,
     )
 
-    # Assuming the variable 'last_message' contains the output
-    #last_message_id = last_message.last_id
+    if run.status == 'completed':
+        # Fetch all messages and filter for the last message from the assistant
+        last_message = client.beta.threads.messages.list(
+            thread_id=thread.id,
+            order='desc',
+            limit=1
+        )
 
-    # Print the extracted last_id
-    #print(f"The last message ID is: {last_message_id}")
+        last_message_value = last_message.data[0].content[0].text.value # Access the first (and only) message
+    else:
+        print("Run status:", run.status)
 
-    last_message_value = last_message.data[0].content[0].text.value # Access the first (and only) message
+    # Use regular expression to find content between triple backticks and newlines
+    pattern = r"```(?:\n)([\s\S]*?)(?:\n)```"
 
-    #print(last_message_value)
-    # Get the content list of the message
-    #content_blocks = message.content
+    # Search for the pattern
+    match = re.search(pattern, last_message_value)
 
-    # Extract the text value from the content
-    # Assuming it's the first content block and type is 'text'
-    #text_value = content_blocks[0].text.value
+    if match:
+        # Extract the content found between triple backticks and newlines
+        extracted_content = match.group(1)
+        print('   extracted content from AI response')  # You can print or save the extracted content to a variable
+    else:
+        print("No content found between triple backticks and newlines")
 
-    #message = client.beta.threads.messages.retrieve(
-        #message_id=last_message_id,
-        #thread_id=thread.id ,
-    #)
-    #print("retriving last message content from its id")
-    #last_message_value = message.content[0].text.value
-    #print(last_message_value)
+    output_file_path='source-files/2024/cl-madrid/ai-results/eliminatoria/ai_processed_' + category + '.csv'
 
-    #print(last_message.content[0].text.value)  # Access the first (and only) message in the response
+    write_string_to_csv(extracted_content,output_file_path)
 
-else:
-    print("Run status:", run.status)
+    print('   ai_processed CSV created\n')
 
-# Use regular expression to find content between triple backticks and newlines
-pattern = r"```(?:\n)([\s\S]*?)(?:\n)```"
-
-# Search for the pattern
-match = re.search(pattern, last_message_value)
-
-if match:
-    # Extract the content found between triple backticks and newlines
-    extracted_content = match.group(1)
-    print(extracted_content)  # You can print or save the extracted content to a variable
-else:
-    print("No content found between triple backticks and newlines")
-
-output_file_path='source-files/2024/cl-madrid/ai-results/eliminatoria/ai_processed_alma_de_marinera_automatic.csv'
-
-write_string_to_csv(extracted_content,output_file_path)
+print('AI processed all the files in '+ folder_path)

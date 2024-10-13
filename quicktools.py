@@ -30,32 +30,11 @@ client = OpenAI(
 
 #print(csv_content)
 
-import re
+import os
 
-message = client.beta.threads.messages.retrieve(
-        message_id='msg_Ii11VIzeJCW3oDGtUywZG2FM',
-        thread_id='thread_oe02quVOW6Fp1cC22f2kfcr6',
-    )
-#print("retriving last message content from its id")
-#print(message.content[0].text.value)
+# Example usage
+folder_path = "source-files/2024/cl-madrid/eliminatoria"
+file_list = os.listdir(folder_path)
+categories = [os.path.splitext(file)[0] for file in file_list]
 
-# Assuming last_message_value contains the message content
-last_message_value = message.content[0].text.value
-
-# Use regular expression to find content between triple backticks and newlines
-pattern = r"```(?:\n)([\s\S]*?)(?:\n)```"
-
-# Search for the pattern
-match = re.search(pattern, last_message_value)
-
-if match:
-    # Extract the content found between triple backticks and newlines
-    extracted_content = match.group(1)
-    print(extracted_content)  # You can print or save the extracted content to a variable
-    print(type(extracted_content))
-else:
-    print("No content found between triple backticks and newlines")
-
-output_file_path='source-files/2024/cl-madrid/ai-results/eliminatoria/ai_processed_adulto_automatic.csv'
-
-write_string_to_csv(extracted_content,output_file_path)
+print(categories)
