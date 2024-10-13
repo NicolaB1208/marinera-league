@@ -33,8 +33,31 @@ client = OpenAI(
 import os
 
 # Example usage
-folder_path = "source-files/2024/cl-madrid/eliminatoria"
-file_list = os.listdir(folder_path)
-categories = [os.path.splitext(file)[0] for file in file_list]
+#folder_path = "source-files/2024/cl-madrid/eliminatoria"
+#file_list = os.listdir(folder_path)
+#categories = [os.path.splitext(file)[0] for file in file_list]
 
-print(categories)
+#print(categories)
+
+import csv
+
+def clean_csv(input_file, output_file):
+    # Open the input CSV file
+    with open(input_file, 'r', encoding='utf-8') as infile:
+        reader = csv.reader(infile)
+        # Open the output CSV file
+        with open(output_file, 'w', newline='', encoding='utf-8') as outfile:
+            writer = csv.writer(outfile)
+
+            # Loop through each row in the input CSV
+            for row in reader:
+                # Strip spaces from each value in the row
+                cleaned_row = [value.strip() for value in row]
+                # Write the cleaned row to the output CSV
+                writer.writerow(cleaned_row)
+
+# Example usage
+input_file = 'source-files/2024/cl-madrid/database_export/people.csv'  # Your final CSV that needs cleaning
+output_file = 'source-files/2024/cl-madrid/database_export/cleaned_people.csv'  # Cleaned CSV to be written
+
+clean_csv(input_file, output_file)

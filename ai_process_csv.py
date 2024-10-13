@@ -26,13 +26,22 @@ thread = client.beta.threads.create()
 #print(f"New chat session (thread) created with ID: {thread.id}")
 
 # Categories list
-folder_path = "source-files/2024/cl-madrid/eliminatoria"
+folder_path = "source-files/2024/cl-madrid/final"
 file_list = os.listdir(folder_path)
 categories = [os.path.splitext(file)[0] for file in file_list]
+output_folder ='source-files/2024/cl-madrid/ai-results/final'
 
 for category in categories:
     # Path to your CSV file
-    csv_file_path = 'source-files/2024/cl-madrid/eliminatoria/' + category + '.csv'
+    csv_file_path = folder_path + '/' + category + '.csv'
+
+    # Skip non-CSV files like .DS_Store
+    if not csv_file_path.endswith('.csv'):
+        continue
+    
+    # Ensure it's not a hidden file like .DS_Store
+    if os.path.basename(csv_file_path).startswith('.'):
+        continue
 
     # Get the entire CSV content as a string
     csv_content = read_csv_as_string(csv_file_path)
@@ -80,7 +89,7 @@ for category in categories:
     else:
         print("No content found between triple backticks and newlines")
 
-    output_file_path='source-files/2024/cl-madrid/ai-results/eliminatoria/ai_processed_' + category + '.csv'
+    output_file_path=output_folder + '/ai_processed_' + category + '.csv'
 
     write_string_to_csv(extracted_content,output_file_path)
 

@@ -1,0 +1,6 @@
+.import ai-results/combined_eliminatoria_withids_couples.csv eliminatoria_madrid_couples
+.import ai-results/combined_eliminatoria_withids_single.csv eliminatoria_madrid_single
+.import ai-results/combined_final_withids_couples.csv final_madrid_couples
+.import ai-results/combined_final_withids_single.csv final_madrid_single
+.import ai-results/combined_semifinal_withids_couples.csv semifinal_madrid_couples
+.import ai-results/combined_semifinal_withids_single.csv semifinal_madrid_single

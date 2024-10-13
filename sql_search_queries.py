@@ -45,11 +45,23 @@ SELECT * FROM couples
 JOIN people on (couples.couple_id_1,couples.couple_id_1) = (people.id,people.id)
 LIMIT 10;
 
-SELECT category,total_score,name,qualified FROM eliminatoria_madrid WHERE couple_id IN (
+SELECT category,total_score,name,qualified FROM eliminatoria_madrid_couples WHERE couple_id IN (
 SELECT id FROM couples WHERE couple_id_1 IN (
 SELECT id FROM people WHERE name = 'Mayaluz Carrera Villar'));
 
-SELECT category,total_score,name,qualified,names FROM eliminatoria_madrid 
-JOIN couples ON eliminatoria_madrid.couple_id = couples.id
+SELECT category,total_score,name,qualified,names FROM eliminatoria_madrid_single 
+JOIN couples ON eliminatoria_madrid_single.person_id = couples.id
 JOIN people ON couples.couple_id_1 = people.id
-WHERE name = 'Mayaluz Carrera Villar';
+WHERE name = 'Ami Kennice Rodríguez';
+
+
+### SEARCH RESULT OF A PERSON IN A COUPLE
+SELECT category,total_score,name,qualified,names FROM final_madrid_couples 
+JOIN couples ON final_madrid_couples.couple_id = couples.id
+JOIN people ON couples.couple_id_1 = people.id
+WHERE name = 'Victoria Cárdenas';
+
+### SEARCH RESULT OF A PERSON SINGLE
+SELECT category,total_score,name,qualified FROM final_madrid_single
+JOIN people ON final_madrid_single.person_id = people.id
+WHERE name = 'Nicola Battoia';
