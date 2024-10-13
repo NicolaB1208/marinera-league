@@ -1,4 +1,5 @@
 import csv
+import os
 
 # SQL commands to export the people table to a csv
 #.headers on
@@ -8,10 +9,12 @@ import csv
 #.output stdout
 
 # List of file paths you want to process
-files_paths = ['ai_processed_adulto.csv', 'ai_processed_single_a.csv']  # Replace with actual file paths
+folder_path = "source-files/2024/cl-madrid/ai-results/eliminatoria"
+file_names = os.listdir(folder_path)
+files_paths = [os.path.join(folder_path, file_name) for file_name in file_names]
+print(files_paths)
 
-# Create the output CSV file once and write the header
-with open('people_separated.csv', 'w', newline='') as output_file:
+with open('source-files/2024/cl-madrid/people_separated.csv', 'w', newline='') as output_file:
     fieldnames = ['name']  # Specify the fieldnames
     writer = csv.DictWriter(output_file, fieldnames=fieldnames)
     
