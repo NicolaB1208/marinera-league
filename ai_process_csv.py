@@ -2,7 +2,8 @@
 from openai import OpenAI
 import os
 from dotenv import load_dotenv
-from functions import read_csv_as_string
+from functions import read_csv_as_string,write_string_to_csv
+import re
 
 # Load environment variables from the .env file
 load_dotenv()
@@ -23,10 +24,10 @@ assistant = client.beta.assistants.retrieve('asst_0urRZRs0q9ZotCxpirCrfwpQ')
 
 # Step 2: Start a new chat session, by creating a new thread
 thread = client.beta.threads.create()
-print(f"New chat session (thread) created with ID: {thread.id}")
+#print(f"New chat session (thread) created with ID: {thread.id}")
 
 # Path to your CSV file
-csv_file_path = 'source-files/2024/cl-madrid/eliminatoria/adulto.csv'
+csv_file_path = 'source-files/2024/cl-madrid/eliminatoria/alma_de_marinera.csv'
 
 # Get the entire CSV content as a string
 csv_content = read_csv_as_string(csv_file_path)
@@ -58,14 +59,14 @@ if run.status == 'completed':
     )
 
     # Assuming the variable 'last_message' contains the output
-    last_message_id = last_message.last_id
+    #last_message_id = last_message.last_id
 
     # Print the extracted last_id
-    print(f"The last message ID is: {last_message_id}")
+    #print(f"The last message ID is: {last_message_id}")
 
     last_message_value = last_message.data[0].content[0].text.value # Access the first (and only) message
 
-    print(last_message_value)
+    #print(last_message_value)
     # Get the content list of the message
     #content_blocks = message.content
 
@@ -73,14 +74,32 @@ if run.status == 'completed':
     # Assuming it's the first content block and type is 'text'
     #text_value = content_blocks[0].text.value
 
-    message = client.beta.threads.messages.retrieve(
-        message_id=last_message_id,
-        thread_id=thread.id ,
-    )
-    print("retriving last message content from its id")
-    print(message.content[0].text.value)
+    #message = client.beta.threads.messages.retrieve(
+        #message_id=last_message_id,
+        #thread_id=thread.id ,
+    #)
+    #print("retriving last message content from its id")
+    #last_message_value = message.content[0].text.value
+    #print(last_message_value)
 
     #print(last_message.content[0].text.value)  # Access the first (and only) message in the response
 
 else:
     print("Run status:", run.status)
+
+# Use regular expression to find content between triple backticks and newlines
+pattern = r"```(?:\n)([\s\S]*?)(?:\n)```"
+
+# Search for the pattern
+match = re.search(pattern, last_message_value)
+
+if match:
+    # Extract the content found between triple backticks and newlines
+    extracted_content = match.group(1)
+    print(extracted_content)  # You can print or save the extracted content to a variable
+else:
+    print("No content found between triple backticks and newlines")
+
+output_file_path='source-files/2024/cl-madrid/ai-results/eliminatoria/ai_processed_alma_de_marinera_automatic.csv'
+
+write_string_to_csv(extracted_content,output_file_path)

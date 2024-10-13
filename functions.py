@@ -4,9 +4,9 @@ import csv
 from io import StringIO
 
 # Function to read the entire CSV and format it as a string
-def read_csv_as_string(file_path):
+def read_csv_as_string(input_file_path):
     output = StringIO()
-    with open(file_path, newline='') as csvfile:
+    with open(input_file_path, newline='') as csvfile:
         reader = csv.reader(csvfile)
         writer = csv.writer(output)
 
@@ -16,6 +16,20 @@ def read_csv_as_string(file_path):
     
     # Return the CSV content as a string
     return output.getvalue()
+
+def write_string_to_csv(csv_string,output_file_path):
+    # Use StringIO to treat the csv_string as a file-like object
+    input_data = StringIO(csv_string)
+    reader = csv.reader(input_data)
+
+    # Write the content to the output CSV file
+    with open(output_file_path, mode='w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+
+        # Write each row from the csv_string to the file
+        for row in reader:
+            writer.writerow(row)
+
 
 client = OpenAI()
 
