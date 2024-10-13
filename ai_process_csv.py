@@ -63,7 +63,7 @@ if run.status == 'completed':
     # Print the extracted last_id
     print(f"The last message ID is: {last_message_id}")
 
-    last_message_value = last_message.data[0].content[0].text.value  # Access the first (and only) message
+    last_message_value = last_message.data[0].content[0].text.value # Access the first (and only) message
 
     print(last_message_value)
     # Get the content list of the message
@@ -77,7 +77,8 @@ if run.status == 'completed':
         message_id=last_message_id,
         thread_id=thread.id ,
     )
-    print(message)
+    print("retriving last message content from its id")
+    print(message.content[0].text.value)
 
     #print(last_message.content[0].text.value)  # Access the first (and only) message in the response
 
