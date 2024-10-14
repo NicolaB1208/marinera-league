@@ -38,14 +38,36 @@
         </style>
     </head>
     <body>
-        <h1>Marinera League HELLO</h1>
+        <h1>Marinera League</h1>
         <h2>Encuentra todos los resultados de la marinera norteña</h2>
-    
-        <!-- Section for the Name Input -->
+            
         <div class="section">
-            <h3>Buscar por Categoria</h3>
-            <input id="categoryInput" autocomplete="off" autofocus placeholder="Categoría" type="text">
+            <h3>Selecciona el concurso:</h3>
+            <select id="competitionSelect" name="competition">
+                {% for competition in competitions %}
+                    <option value="{{ competition }}">{{ competition }}</option>
+                {% endfor %}
+            </select>
+            <h3>Selecciona la categoria:</h3>
+            <select id="categorySelect" name="category">
+                {% for category in categories %}
+                    <option value="{{ category }}">{{ category }}</option>
+                {% endfor %}
+            </select>
         </div>
+
+        <div class="section">
+            
+        </div>  
+
+        <div class="section">
+            <h3>Selecciona la fase del concurso:</h3>
+            <select id="phaseSelect" name="phase">
+                {% for phase in phases %}
+                    <option value="{{ phase }}">{{ phase }}</option>
+                {% endfor %}
+            </select>
+        </div> 
 
         <table>
             <thead>
@@ -60,51 +82,14 @@
             <tbody></tbody>
         </table>
 
-        <script>
-            // Get all the category radio buttons
-            // let categoryRadios = document.querySelectorAll('.categoryRadio');
-            let categoryInput = document.querySelector('input');
-            categoryInput.addEventListener('input', async function() {
-                console.log(categoryInput.value)
-                let response = await fetch('/search?q=' + categoryInput.value);
-                let competition_results = await response.json();
-                let html = '';
-                if (categoryInput.value.startsWith('single')){
-                    for (let person_id in competition_results) {
-                            let couple_number = competition_results[person_id].couple_number.replace('<', '&lt;').replace('&', '&amp;');
-                            let category = competition_results[person_id].category.replace('<', '&lt;').replace('&', '&amp;').replace('alma_de_marinera', 'alma de marinera');
-                            let name = competition_results[person_id].name.replace('<', '&lt;').replace('&', '&amp;');
-                            let total_score = competition_results[person_id].total_score.replace('<', '&lt;').replace('&', '&amp;');
-                            let qualified = competition_results[person_id].qualified.replace('<', '&lt;').replace('&', '&amp;').replace('11', 'PRIMERO').replace('12', 'SEGUNDO').replace('13', 'TERCERO');
-                            html +=                         
-                                        '<tr>' +
-                                        '<td>' + category + '</td>' +
-                                        '<td>' + name + '</td>' +
-                                        '<td>' + couple_number + '</td>' +
-                                        '<td>' + total_score + '</td>' +
-                                        '<td>' + qualified + '</td>'+
-                                        '</tr>';
-                    }                    
-                } else {
-                    for (let couple_id in competition_results) {
-                        let couple_number = competition_results[couple_id].couple_number.replace('<', '&lt;').replace('&', '&amp;');
-                        let category = competition_results[couple_id].category.replace('<', '&lt;').replace('&', '&amp;').replace('alma_de_marinera', 'alma de marinera');
-                        let names = competition_results[couple_id].names.replace('<', '&lt;').replace('&', '&amp;');
-                        let total_score = competition_results[couple_id].total_score.replace('<', '&lt;').replace('&', '&amp;');
-                        let qualified = competition_results[couple_id].qualified.replace('<', '&lt;').replace('&', '&amp;').replace('11', 'PRIMERO').replace('12', 'SEGUNDO').replace('13', 'TERCERO');
-                        html +=                         
-                                    '<tr>' +
-                                    '<td>' + category + '</td>' +
-                                    '<td>' + names + '</td>' +
-                                    '<td>' + couple_number + '</td>' +
-                                    '<td>' + total_score + '</td>' +
-                                    '<td>' + qualified + '</td>' +
-                                    '</tr>';    
-                    }
-                }
-                document.querySelector('tbody').innerHTML = html;
-            });
-        </script>
+        <!-- Section for the Name Input -->
+        <div class="section">
+            <h3>Buscar por Categoria</h3>
+            <input id="categoryInput" autocomplete="off" autofocus placeholder="Categoría" type="text">
+        </div>
+
+        <script src="{{ url_for('static', filename='js/scriptGeneralResults.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/resultsFromInput.js') }}"></script>
 
     </body>
 </html>
