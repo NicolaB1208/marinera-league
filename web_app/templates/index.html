@@ -6,9 +6,28 @@
         <meta name="viewport" content="initial-scale=1, width=device-width">
         <title>Marinera League</title>
         <style>
-            /* Add some space between sections */
-            .section {
-                margin-bottom: 20px;
+            /* Flex container for dropdowns and labels */
+            .dropdown-row {
+                display: flex;
+                flex-wrap: wrap; /* Allows wrapping on small screens */
+                align-items: center;
+                justify-content: flex-start; /* Align all items to the start */
+                gap: 20px; /* Space between dropdowns */
+            }
+    
+            /* Each label and select dropdown in a group */
+            .dropdown-group {
+                display: flex;
+                align-items: center;
+                flex: 1; /* Each dropdown group will flex to fill available space */
+                min-width: 200px; /* Ensures dropdown groups don't get too small */
+            }
+    
+            /* Label spacing for dropdowns */
+            .dropdown-group h3 {
+                margin: 0;
+                margin-right: 10px;
+                white-space: nowrap; /* Prevent label wrapping */
             }
     
             /* Table Styling */
@@ -40,35 +59,38 @@
     <body>
         <h1>Marinera League</h1>
         <h2>Encuentra todos los resultados de la marinera norteña</h2>
-            
-        <div class="section">
-            <h3>Selecciona el concurso:</h3>
-            <select id="competitionSelect" name="competition">
-                {% for competition in competitions %}
-                    <option value="{{ competition }}">{{ competition }}</option>
-                {% endfor %}
-            </select>
-            <h3>Selecciona la categoria:</h3>
-            <select id="categorySelect" name="category">
-                {% for category in categories %}
-                    <option value="{{ category }}">{{ category }}</option>
-                {% endfor %}
-            </select>
+
+        <!-- Dropdowns Section using Flexbox -->
+        <div class="dropdown-row">
+            <div class="dropdown-group">
+                <h3>Concurso:</h3>
+                <select id="competitionSelect" name="competition">
+                    {% for competition in competitions %}
+                        <option value="{{ competition }}">{{ competition }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="dropdown-group">
+                <h3>Categoría:</h3>
+                <select id="categorySelect" name="category">
+                    {% for category in categories %}
+                        <option value="{{ category }}">{{ category }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="dropdown-group">
+                <h3>Fase:</h3>
+                <select id="phaseSelect" name="phase">
+                    {% for phase in phases %}
+                        <option value="{{ phase }}">{{ phase }}</option>
+                    {% endfor %}
+                </select>
+            </div>
         </div>
 
-        <div class="section">
-            
-        </div>  
-
-        <div class="section">
-            <h3>Selecciona la fase del concurso:</h3>
-            <select id="phaseSelect" name="phase">
-                {% for phase in phases %}
-                    <option value="{{ phase }}">{{ phase }}</option>
-                {% endfor %}
-            </select>
-        </div> 
-
+        <!-- Table Section -->
         <table>
             <thead>
                 <tr>
@@ -81,13 +103,7 @@
             </thead>
             <tbody></tbody>
         </table>
-
-        <!-- Section for the Name Input -->
-        <div class="section">
-            <h3>Buscar por Categoria</h3>
-            <input id="categoryInput" autocomplete="off" autofocus placeholder="Categoría" type="text">
-        </div>
-
+                
         <script src="{{ url_for('static', filename='js/scriptGeneralResults.js') }}"></script>
         <script src="{{ url_for('static', filename='js/resultsFromInput.js') }}"></script>
 
