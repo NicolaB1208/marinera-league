@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+        <title>Marinera League</title>
+        <style>
+            /* Add some space between sections */
+            .section {
+                margin-bottom: 20px; /* Adjust this value to control spacing between sections */
+            }
+    
+            /* Style for radio button groups */
+            .radio-group {
+                display: block;
+                margin-top: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Marinera League</h1>
+        <h2>Encuentra todos los resultados de la marinera norteña</h2>
+    
+        <!-- Section for the Name Input -->
+        <div class="section">
+            <h3>Buscar por Nombre</h3>
+            <input id="nameInput" autocomplete="off" autofocus placeholder="Nombre" type="text">
+        </div>
+    
+        <!-- Section for the Category Radio Buttons -->
+        <div class="section">
+            <h3>Selecciona la Categoría</h3>
+            <div class="radio-group">
+                {% for category in categories %}
+                <label>
+                    <input class="categoryRadio" name="category" type="radio" value="{{ category }}"> {{ category }}
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+    
+        <!-- Section for the Phase Radio Buttons -->
+        <div class="section">
+            <h3>Selecciona la Fase</h3>
+            <div class="radio-group">
+                {% for phase in phases %}
+                <label>
+                    <input class="phaseRadio" name="phase" type="radio" value="{{ phase }}"> {{ phase }}
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Categoría</th>
+                    <th>Nombres</th>
+                    <th>Couple Number</th>
+                    <th>Total Score</th>
+                    <th>Calificado</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <script>
+            //let nameInput = document.getElementById('nameInput');
+            let categoryRadios = document.querySelectorAll('.categoryRadio');
+            //let phaseRadios = document.querySelectorAll('.phaseRadio');
+
+            function performSearch() {
+                //let name = nameInput.value.trim();
+                let selectedCategory = document.querySelector('input[name="category"]:checked')?.value || '';
+                //let selectedPhase = document.querySelector('input[name="phase"]:checked')?.value || '';
+
+                // Build query parameters
+                let queryParams = new URLSearchParams({
+                    //q: name,
+                    q: selectedCategory
+                    //phase: selectedPhase
+                });
+
+                fetch('/search?' + queryParams.toString())
+                    .then(response => response.json())
+                    .then(results => {
+                        let html = '';
+                        results.forEach(result => {
+                            let safeCoupleNumber = result.couple_number.replace(/</g, '&lt;').replace(/&/g, '&amp;');
+                            let safeCategory = result.category.replace(/</g, '&lt;').replace(/&/g, '&amp;');
+                            let safeNames = result.names.replace(/</g, '&lt;').replace(/&/g, '&amp;');
+                            let safeTotalScore = result.total_score.replace(/</g, '&lt;').replace(/&/g, '&amp;');
+                            let safeCalificado = result.calificado.replace(/</g, '&lt;').replace(/&/g, '&amp;');
+
+                            html += `
+                                <tr>
+                                    <td>${safeCategory}</td>
+                                    <td>${safeNames}</td>
+                                    <td>${safeCoupleNumber}</td>
+                                    <td>${safeTotalScore}</td>
+                                    <td>${safeCalificado}</td>
+                                </tr>
+                            `;
+                        });
+                        document.querySelector('tbody').innerHTML = html;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        document.querySelector('tbody').innerHTML = '<tr><td colspan="5">An error occurred while fetching data.</td></tr>';
+                    });
+            }
+
+            // Add event listener to text input
+            nameInput.addEventListener('input', performSearch);
+
+            // Add event listeners to category radio buttons
+            categoryRadios.forEach(radio => {
+                radio.addEventListener('change', performSearch);
+            });
+
+            // Add event listeners to phase radio buttons
+            phaseRadios.forEach(radio => {
+                radio.addEventListener('change', performSearch);
+            });
+        </script>
+
+    </body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+        <title>Marinera League</title>
+        <style>
+            /* Add some space between sections */
+            .section {
+                margin-bottom: 20px;
+            }
+    
+            /* Table Styling */
+            table {
+                width: 100%;
+                border-collapse: collapse; /* Ensures no double borders */
+                border: 2px solid black; /* External table border */
+                margin-top: 20px;
+            }
+    
+            th, td {
+                border: 1px solid rgb(15, 9, 140); /* Adds borders to each cell */
+                padding: 8px 12px; /* Adds padding inside the cells */
+                text-align: left; /* Align text to the left */
+            }
+    
+            /* Zebra striping for rows */
+            tbody tr:nth-child(odd) {
+                background-color: #f2f2f2;
+            }
+    
+            /* Optional: Styling the table header */
+            th {
+                background-color: #f4f4f4;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Marinera League HELLO</h1>
+        <h2>Encuentra todos los resultados de la marinera norteña</h2>
+    
+        <!-- Section for the Name Input -->
+        <div class="section">
+            <h3>Buscar por Categoria</h3>
+            <input id="categoryInput" autocomplete="off" autofocus placeholder="Categoría" type="text">
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Categoría</th>
+                    <th>Nombres</th>
+                    <th>Numero Pareja</th>
+                    <th>Puntaje total</th>
+                    <th>Calificación</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <script>
+            // Get all the category radio buttons
+            // let categoryRadios = document.querySelectorAll('.categoryRadio');
+            let categoryInput = document.querySelector('input');
+            categoryInput.addEventListener('input', async function() {
+                console.log(categoryInput.value)
+                let response = await fetch('/search?q=' + categoryInput.value);
+                let competition_results = await response.json();
+                let html = '';
+                if (categoryInput.value.startsWith('single')){
+                    for (let person_id in competition_results) {
+                            let couple_number = competition_results[person_id].couple_number.replace('<', '&lt;').replace('&', '&amp;');
+                            let category = competition_results[person_id].category.replace('<', '&lt;').replace('&', '&amp;').replace('alma_de_marinera', 'alma de marinera');
+                            let name = competition_results[person_id].name.replace('<', '&lt;').replace('&', '&amp;');
+                            let total_score = competition_results[person_id].total_score.replace('<', '&lt;').replace('&', '&amp;');
+                            let qualified = competition_results[person_id].qualified.replace('<', '&lt;').replace('&', '&amp;').replace('11', 'PRIMERO').replace('12', 'SEGUNDO').replace('13', 'TERCERO');
+                            html +=                         
+                                        '<tr>' +
+                                        '<td>' + category + '</td>' +
+                                        '<td>' + name + '</td>' +
+                                        '<td>' + couple_number + '</td>' +
+                                        '<td>' + total_score + '</td>' +
+                                        '<td>' + qualified + '</td>'+
+                                        '</tr>';
+                    }                    
+                } else {
+                    for (let couple_id in competition_results) {
+                        let couple_number = competition_results[couple_id].couple_number.replace('<', '&lt;').replace('&', '&amp;');
+                        let category = competition_results[couple_id].category.replace('<', '&lt;').replace('&', '&amp;').replace('alma_de_marinera', 'alma de marinera');
+                        let names = competition_results[couple_id].names.replace('<', '&lt;').replace('&', '&amp;');
+                        let total_score = competition_results[couple_id].total_score.replace('<', '&lt;').replace('&', '&amp;');
+                        let qualified = competition_results[couple_id].qualified.replace('<', '&lt;').replace('&', '&amp;').replace('11', 'PRIMERO').replace('12', 'SEGUNDO').replace('13', 'TERCERO');
+                        html +=                         
+                                    '<tr>' +
+                                    '<td>' + category + '</td>' +
+                                    '<td>' + names + '</td>' +
+                                    '<td>' + couple_number + '</td>' +
+                                    '<td>' + total_score + '</td>' +
+                                    '<td>' + qualified + '</td>' +
+                                    '</tr>';    
+                    }
+                }
+                document.querySelector('tbody').innerHTML = html;
+            });
+        </script>
+
+    </body>
+</html>
