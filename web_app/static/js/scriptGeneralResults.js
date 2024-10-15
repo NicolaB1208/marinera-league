@@ -16,6 +16,7 @@ async function fetchResults(category, phase) {
     let response = await fetch(`/search?q=${category}&phase=${phase}`);
     let competition_results = await response.json();
     let html = '';
+    console.log (competition_results)
     if (category.startsWith('single')){
         for (let person_id in competition_results) {
                 let couple_number = competition_results[person_id].couple_number.replace('<', '&lt;').replace('&', '&amp;');
@@ -49,7 +50,7 @@ async function fetchResults(category, phase) {
                         '</tr>';    
         }
     }
-    document.querySelector('tbody').innerHTML = html;
+    document.querySelector('#tabledropdown tbody').innerHTML = html;
 };
 
 // Add event listeners to both dropdowns

@@ -64,5 +64,32 @@ def search():
         competition_results = []
     return jsonify(competition_results)
 
+@app.route("/searchname")
+def searchname():
+    name = request.args.get("name")
+
+    valid_tables = ["final_madrid_single", "final_madrid_couples","semifinal_madrid_single", "semifinal_madrid_couples",
+    "eliminatoria_madrid_single", "eliminatoria_madrid_couples"]
+
+    person_results = {}
+
+    for table in valid_tables:
+        
+        if table.endswith('_couples'):
+            query = f"SELECT * FROM {table} JOIN couples ON {table}.couple_id = couples.id WHERE names LIKE ? GROUP BY category"
+            results = db.execute(query, ('%' + name + '%'))
+            person_results[table] = [results]
+
+        else:
+            query = f"SELECT * FROM {table} JOIN people ON {table}.person_id = people.id WHERE name LIKE ? GROUP BY category"
+            results = db.execute(query, ('%' + name + '%'))
+            person_results[table] = [results]
+
+    return jsonify(person_results)
+    
+
+
+
+
 
 

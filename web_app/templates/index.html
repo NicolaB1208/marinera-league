@@ -60,6 +60,8 @@
         <h1>Marinera League</h1>
         <h2>Encuentra todos los resultados de la marinera norteña</h2>
 
+        <h3> Busca los resultados de un concurso: </h3>
+
         <!-- Dropdowns Section using Flexbox -->
         <div class="dropdown-row">
             <div class="dropdown-group">
@@ -91,7 +93,7 @@
         </div>
 
         <!-- Table Section -->
-        <table>
+        <table id="tabledropdown">
             <thead>
                 <tr>
                     <th>Categoría</th>
@@ -103,9 +105,28 @@
             </thead>
             <tbody></tbody>
         </table>
-                
+                       
         <script src="{{ url_for('static', filename='js/scriptGeneralResults.js') }}"></script>
+
+        <h3> Busca los resultados de un bailarin: </h3>
+
+        <input id="nameInput" type="text" placeholder="Enter your name">
+
         <script src="{{ url_for('static', filename='js/resultsFromInput.js') }}"></script>
+
+        <table id="tablenamesearch">
+            <thead>
+                <tr>
+                    <th>Fase Concurso</th>
+                    <th>Categoría</th>
+                    <th>Nombres</th>                    
+                    <th>Puntaje total</th>
+                    <th>Calificación</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
 
     </body>
 </html>
