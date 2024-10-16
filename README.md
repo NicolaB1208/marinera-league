@@ -17,7 +17,11 @@ Each competition publishes the results in a different way (mainly Excel sheets, 
 ## What I'm building here ##
 
 1. A unified database of all competition results and dancers (SQLite for now)
-2. Function website for easy search (flask web app)
+  ![marinera_league_database_schema](https://github.com/user-attachments/assets/57780668-effb-40dd-928c-1858accda836)
+2. Functional website for easy search (flask web app)
+  ![marinera_league_UI](https://github.com/user-attachments/assets/ae26d2ee-d4be-4876-a95b-463023d085d4)
+  ![marinera_league_competition_search](https://github.com/user-attachments/assets/5bac089e-f943-41cb-a43e-04b45c6bfe45)
+  ![marinera_league_participant_search](https://github.com/user-attachments/assets/a7343ca4-5cd6-4012-ad8c-debb00f2fbf1)
 
 ## How: ##
 ### New data input system ###
