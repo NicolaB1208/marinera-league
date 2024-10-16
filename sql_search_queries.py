@@ -65,3 +65,24 @@ WHERE name = 'Victoria Cárdenas';
 SELECT category,total_score,name,qualified FROM final_madrid_single
 JOIN people ON final_madrid_single.person_id = people.id
 WHERE name = 'Nicola Battoia';
+
+### SEARCH RESULT OF A PERSON SINGLE
+SELECT * FROM final_madrid_couples
+JOIN couples ON final_madrid_couples.couple_id = couples.id
+WHERE category = 'infantil';
+
+
+## SEARCH RESULTS OF A CONCURSO PHASE
+SELECT * FROM ?_madrid_couples
+JOIN couples ON ?.
+
+
+SELECT * FROM final_madrid_single JOIN people ON final_madrid_single.person_id = people.id WHERE category = 'juvenil' ORDER BY total_score DESC
+
+SELECT * FROM final_madrid_couples JOIN couples ON final_madrid_couples.couple_id = couple.id WHERE category = 'juvenil' ORDER BY total_score DESC;
+
+SELECT * FROM final_madrid_couples JOIN couples ON final_madrid_couples.couple_id = couples.id WHERE category LIKE 'juvenil' ORDER BY total_score DESC;
+
+SELECT * FROM final_madrid_couples JOIN couples ON final_madrid_couples.couple_id = couples.id WHERE names LIKE '%A%';
+
+SELECT * FROM final_madrid_single JOIN people ON final_madrid_single.person_id = people.id WHERE name LIKE '%Nico%';

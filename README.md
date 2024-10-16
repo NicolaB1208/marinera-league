@@ -64,9 +64,9 @@ I'm using an OpenAI assistant that:
 - Formats it into a clean .csv.
 - Outputs only the final .csv.
 
-*System prompt:* `openai_assistant_prompt`
+*System prompt:* `openAI_assistant_systemprompt.txt`
 
-Steps to process data with AI (`ai_process_csv.txt`):
+Steps to process data with AI (`ai_process_csv.py`):
 1. Retrieve the assistant.
 2. Create a new thread.
 3. Loop through the .csv files in the input folder.
